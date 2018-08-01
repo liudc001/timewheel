@@ -3,7 +3,10 @@ package com.fhr.timewheel.standalone.singleround;
 import com.fhr.timewheel.standalone.TimeTask;
 import com.fhr.timewheel.standalone.TimeWheel;
 import com.fhr.timewheel.standalone.Timeout;
+import io.netty.util.internal.PlatformDependent;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Huaran Fan on 2018/7/31
  *
- * @description:时间轮实现
+ * @description 时间轮实现
  */
 public class HashTimeWheel implements TimeWheel {
 	/**
@@ -43,6 +46,21 @@ public class HashTimeWheel implements TimeWheel {
 		}
 	};
 
+	/**
+	 * 待执行timeout
+	 */
+	protected final Queue<HashWheelTimeout> timeouts = new LinkedList<>();
+
+	/**
+	 * 取消的timeout
+	 */
+	protected final Queue<HashWheelTimeout> cancelledTimeouts = new LinkedList<>();
+
+	/**
+	 * 时间轮开始运行时间
+	 */
+	protected volatile long startTime;
+
 	public HashTimeWheel(long tickDuration, TimeUnit unit, int ticksPerWheel, int workerThreadNum) {
 		this.tickDuration = tickDuration;
 		this.unit = unit;
@@ -51,18 +69,18 @@ public class HashTimeWheel implements TimeWheel {
 	}
 
 	@Override
-	public void start(){
+	public void start() {
 		// TODO 开启时间轮
 	}
 
 	@Override
-	public Set<Timeout> stop(boolean mayInterrupt) throws InterruptedException{
+	public Set<Timeout> stop(boolean mayInterrupt) throws InterruptedException {
 		// TODO 停止时间轮
 		return null;
 	}
 
 	@Override
-	public Timeout newTimeout(TimeTask timeTask, long delay, TimeUnit unit){
+	public Timeout newTimeout(TimeTask timeTask, long delay, TimeUnit unit) {
 		// TODO 新建任务
 		return null;
 	}
