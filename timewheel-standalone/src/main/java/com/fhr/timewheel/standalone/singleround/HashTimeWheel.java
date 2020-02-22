@@ -85,7 +85,6 @@ public class HashTimeWheel implements TimeWheel {
 		return null;
 	}
 
-
 	public long getTickDuration() {
 		return tickDuration;
 	}
