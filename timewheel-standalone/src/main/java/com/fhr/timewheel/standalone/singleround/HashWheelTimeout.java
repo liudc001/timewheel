@@ -13,9 +13,10 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
  * @description
  */
 public class HashWheelTimeout implements Timeout {
-	private static final int ST_INIT = 0;
-	private static final int ST_CANCELLED = 1;
-	private static final int ST_EXPIRED = 2;
+	
+	private static final int ST_INIT = 0;// 初始状态
+	private static final int ST_CANCELLED = 1; // 已撤销
+	private static final int ST_EXPIRED = 2; // 已到期
 	private static final AtomicIntegerFieldUpdater<HashWheelTimeout> STATE_UPDATER;
 
 	static {
@@ -26,7 +27,7 @@ public class HashWheelTimeout implements Timeout {
 	protected final TimeTask task;
 	protected final long deadline;
 
-	protected volatile int state = ST_INIT;
+	protected volatile int state = ST_INIT; // 默认初始状态
 
 	// remainingRounds will be calculated and set by Worker.transferTimeoutsToBuckets() before the
 	// HashedWheelTimeout will be added to the correct HashedWheelBucket.
@@ -93,7 +94,10 @@ public class HashWheelTimeout implements Timeout {
 	public boolean isExpired() {
 		return state() == ST_EXPIRED;
 	}
-
+	
+	/**
+	 * 到期操作，执行任务
+	 */
 	public void expire() {
 		if (!compareAndSetState(ST_INIT, ST_EXPIRED)) {
 			return;
@@ -120,10 +124,12 @@ public class HashWheelTimeout implements Timeout {
 		if (remaining > 0) {
 			buf.append(remaining)
 					.append(" ns later");
-		} else if (remaining < 0) {
+		} 
+		else if (remaining < 0) {
 			buf.append(-remaining)
 					.append(" ns ago");
-		} else {
+		} 
+		else {
 			buf.append("now");
 		}
 
