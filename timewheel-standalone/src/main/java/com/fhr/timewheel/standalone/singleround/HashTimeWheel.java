@@ -3,7 +3,6 @@ package com.fhr.timewheel.standalone.singleround;
 import com.fhr.timewheel.standalone.TimeTask;
 import com.fhr.timewheel.standalone.TimeWheel;
 import com.fhr.timewheel.standalone.Timeout;
-import io.netty.util.internal.PlatformDependent;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -40,6 +39,7 @@ public class HashTimeWheel implements TimeWheel {
 	/**
 	 * 工作者线程工厂
 	 */
+	@SuppressWarnings("unused")
 	private final ThreadFactory threadFactory = new ThreadFactory() {
 		public Thread newThread(Runnable r) {
 			return null;
